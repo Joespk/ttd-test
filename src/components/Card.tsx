@@ -6,17 +6,17 @@ interface IBlogprops {
 
 const Card = ({ blog }: IBlogprops) => {
   return (
-    <div className="max-w-sm rounded-md overflow-hidden shadow-lg bg-white pb-3 relative hover:translate-y-[-5px] transition-transform duration-300">
+    <div className="max-w-64 rounded-md  overflow-hidden shadow-2xl bg-white pb-3  hover:translate-y-[-5px] transition-transform duration-300 flex flex-col items-center drop-shadow-xl ">
       <img src={blog.imageUrl} />
-      <div className="px-2">
-        <h2 className="text-lg font-bold mb-1 line-clamp-2">Lorem ipsum</h2>
-        <span className="text-gray-600 line-clamp-3 my-2 text-sm">
+      <div className="flex flex-col item-center justify-center">
+        <h2 className="text-lg font-bold  flex justify-center">Lorem ipsum</h2>
+        <span className="text-gray-600  my-2 text-sm">
           One-stop Platform community for Agents and Operator in Thailand
         </span>
-        <button className="bg-[#2A4B6A] hover:bg-blue-800 text-white font-bold py-1 px-3 rounded ">
-          Buy package
-        </button>
       </div>
+      <button className=" flex justify-center item-center text-[16px] bg-[#2A4B6A] hover:bg-blue-800 text-white font-base rounded-lg w-[141px] py-[10px] ">
+        Buy package
+      </button>
     </div>
   );
 };
