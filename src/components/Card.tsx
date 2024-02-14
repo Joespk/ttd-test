@@ -7,7 +7,7 @@ interface IBlogprops {
 const Card = ({ blog }: IBlogprops) => {
   return (
     <div className="max-w-sm rounded-md overflow-hidden shadow-lg bg-white pb-3 relative hover:translate-y-[-5px] transition-transform duration-300">
-      <img src={blog.image} />
+      <img src={blog.imageUrl} />
       <div className="px-2">
         <h2 className="text-lg font-bold mb-1 line-clamp-2">Lorem ipsum</h2>
         <span className="text-gray-600 line-clamp-3 my-2 text-sm">

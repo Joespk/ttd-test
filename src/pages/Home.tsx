@@ -1,3 +1,4 @@
+import { allBlog } from "../Data/Imagedata";
 import Banner from "../components/Banner";
 import Card from "../components/Card";
 
@@ -8,7 +9,9 @@ const Home = () => {
       <div className="flex items-center justify-center flex-col gap-6 ">
         <h1 className="font-bold text-[32px]">Lorem ipsum</h1>
         <div>
-          <Card />
+          {allBlog.map((blog) => (
+            <Card key={blog.id} blog={blog} />
+          ))}
         </div>
       </div>
     </div>

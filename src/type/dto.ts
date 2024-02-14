@@ -1,3 +1,4 @@
 export interface blog {
-  image: string;
+  id: number;
+  imageUrl: string;
 }
