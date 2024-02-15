@@ -4,25 +4,41 @@ import view from "../assets/logo/view.svg";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+interface District {
+  name_th: string;
+}
+
+interface Amphure {
+  name_th: string;
+  tambon: District[];
+}
+
+interface Province {
+  name_th: string;
+  amphure: Amphure[];
+}
+
 const Signin = () => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const [country, setCountry] = useState<string>("Thailand");
   const [countryCode, setCountryCode] = useState<string>("+66");
   const [province, setProvince] = useState<string>("");
-  const [provincelist, setProvincelist] = useState([]);
+  const [provincelist, setProvincelist] = useState<string[]>([]);
   const [city, setCity] = useState<string>("");
+  const [citylist, setCitylist] = useState<string[]>([]);
+  const [ditrict, setDistrict] = useState<string>("");
+  const [districlist, setDistriclist] = useState<string[]>([]);
 
   const fetchProvincesAndCities = async () => {
     try {
       const response = await fetch(
         "https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province_with_amphure_tambon.json"
       );
-      const data = await response.json();
+      const data: Province[] = await response.json();
       const provinces = data.map((item) => item.name_th);
-
-      console.log(provinces);
       setProvincelist(provinces);
+
       // สำหรับเมืองจะทำได้ตามความเหมาะสมของโค้ด
     } catch (error) {
       console.error("Error fetching provinces and cities:", error);
@@ -38,11 +54,73 @@ const Signin = () => {
   ) => {
     const selectedValue = (event.target as HTMLSelectElement).value;
     setProvince(selectedValue);
+    if (selectedValue) {
+      try {
+        const response = await fetch(
+          "https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province_with_amphure_tambon.json"
+        );
+        const data: Province[] = await response.json();
+
+        // กรองข้อมูลเฉพาะอำเภอที่มีจังหวัดตรงกับที่เลือกไว้
+        const selectedProvinceData = data.find(
+          (item) => item.name_th === selectedValue
+        );
+
+        if (selectedProvinceData) {
+          // เฉพาะอำเภอของจังหวัดที่เลือก
+          const cityItems = selectedProvinceData.amphure.map(
+            (item) => item.name_th
+          );
+          // ตั้งค่ารายการอำเภอใหม่
+          setCitylist(cityItems);
+        } else {
+          console.error("Province data not found:", selectedValue);
+        }
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+      }
+    } else {
+      // ถ้าไม่มีการเลือกจังหวัด ก็เคลียร์รายการอำเภอ
+      setCitylist([]);
+    }
   };
 
-  const handleCityChange = (event: React.FormEvent<HTMLSelectElement>) => {
-    const selectedValue = (event.target as HTMLSelectElement).value;
+  const handleCityChange = async (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedValue = event.target.value;
     setCity(selectedValue);
+    if (selectedValue) {
+      try {
+        const response = await fetch(
+          "https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province_with_amphure_tambon.json"
+        );
+        const data: Province[] = await response.json();
+
+        const selectedCityData = data.find((province) =>
+          province.amphure.find((city) => city.name_th === selectedValue)
+        );
+
+        if (selectedCityData) {
+          const districtItems =
+            selectedCityData.amphure
+              .find((city) => city.name_th === selectedValue)
+              ?.tambon.map((district) => district.name_th) || [];
+          setDistriclist(districtItems);
+        } else {
+          console.error("City data not found:", selectedValue);
+        }
+      } catch (error) {
+        console.error("Error fetching districts:", error);
+      }
+    } else {
+      setDistriclist([]);
+    }
+  };
+
+  const handleDistrictChange = (event: React.FormEvent<HTMLSelectElement>) => {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    setDistrict(selectedValue);
   };
 
   const handleCountryCodeChange = (
@@ -244,7 +322,11 @@ const Signin = () => {
             <option value="" className="text-gray-500" disabled selected>
               Choose District
             </option>
-            <option value="Thailand">Thailand</option>
+            {citylist.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
           </select>
         </div>
         <div className="col-start-3">
@@ -252,8 +334,8 @@ const Signin = () => {
           <select
             name="Choose Province"
             id="province"
-            value={province}
-            onChange={handleProvinceChange}
+            value={ditrict}
+            onChange={handleDistrictChange}
             className={`w-full pl-4 pr-16 py-1 rounded-md border focus:outline-none focus:ring focus:border-blue-500 text-sm mt-1 ${
               !province && "text-gray-500"
             }`}
@@ -261,9 +343,11 @@ const Signin = () => {
             <option value="" disabled selected className="text-gray-500">
               Choose Sub-District
             </option>
-            <option value="United States">United States</option>
-            <option value="United Kingdom">United Kingdom</option>
-            <option value="Thailand">Thailand</option>
+            {districlist.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
           </select>
           <h2 className="text-sm mt-1">Zip Code</h2>
           <input
