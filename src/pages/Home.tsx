@@ -4,7 +4,7 @@ import Card from "../components/Card";
 
 const Home = () => {
   return (
-    <div className="flex flex-col gap-16 ">
+    <div className="flex flex-col gap-4 ">
       <Banner />
       <div className="flex items-center justify-center flex-col gap-4 mx-auto my-0 ">
         <h1 className="font-bold text-[32px] items-center flex justify-around ">
