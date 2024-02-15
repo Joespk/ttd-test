@@ -1,7 +1,7 @@
 import mail from "../assets/logo/mail.svg";
 import lock from "../assets/logo/lock.svg";
 import view from "../assets/logo/view.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Signin = () => {
@@ -10,9 +10,32 @@ const Signin = () => {
   const [country, setCountry] = useState<string>("Thailand");
   const [countryCode, setCountryCode] = useState<string>("+66");
   const [province, setProvince] = useState<string>("");
+  const [provincelist, setProvincelist] = useState([]);
   const [city, setCity] = useState<string>("");
 
-  const handleProvinceChange = (event: React.FormEvent<HTMLSelectElement>) => {
+  const fetchProvincesAndCities = async () => {
+    try {
+      const response = await fetch(
+        "https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province_with_amphure_tambon.json"
+      );
+      const data = await response.json();
+      const provinces = data.map((item) => item.name_th);
+
+      console.log(provinces);
+      setProvincelist(provinces);
+      // สำหรับเมืองจะทำได้ตามความเหมาะสมของโค้ด
+    } catch (error) {
+      console.error("Error fetching provinces and cities:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProvincesAndCities();
+  }, []);
+
+  const handleProvinceChange = async (
+    event: React.FormEvent<HTMLSelectElement>
+  ) => {
     const selectedValue = (event.target as HTMLSelectElement).value;
     setProvince(selectedValue);
   };
@@ -202,9 +225,11 @@ const Signin = () => {
             <option value="" disabled selected className="text-gray-500">
               Choose Province
             </option>
-            <option value="United States">United States</option>
-            <option value="United Kingdom">United Kingdom</option>
-            <option value="Thailand">Thailand</option>
+            {provincelist.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
           </select>
           <h2 className="text-sm mt-1">City/District</h2>
           <select
@@ -219,8 +244,6 @@ const Signin = () => {
             <option value="" className="text-gray-500" disabled selected>
               Choose District
             </option>
-            <option value="United States">United States</option>
-            <option value="United Kingdom">United Kingdom</option>
             <option value="Thailand">Thailand</option>
           </select>
         </div>
