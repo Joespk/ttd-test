@@ -7,6 +7,14 @@ const Signin = () => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const [country, setCountry] = useState<string>("Thailand");
+  const [countryCode, setCountryCode] = useState<string>("+66");
+
+  const handleCountryCodeChange = (
+    event: React.FormEvent<HTMLSelectElement>
+  ) => {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    setCountryCode(selectedValue);
+  };
 
   const handleCountryChange = (event: React.FormEvent<HTMLSelectElement>) => {
     const selectedValue = (event.target as HTMLSelectElement).value;
@@ -128,32 +136,34 @@ const Signin = () => {
             <option value="Thailand">Thailand</option>
           </select>
         </div>
-        <div className="col-start-2 items-center">
+        <div className="col-start-2 items-center ">
           <h2 className="text-sm">Phone Number</h2>
-          <select
-            name="country"
-            id="country"
-            value={country}
-            onChange={handleCountryChange}
-            className=" py-1 rounded-md border focus:outline-none focus:ring focus:border-blue-500 text-sm"
-          >
-            <option value="United States">United States</option>
-            <option value="United Kingdom">United Kingdom</option>
-            <option value="Thailand">Thailand</option>
-          </select>
-          <input
-            type="text"
-            name="Tax ID"
-            placeholder="Enter Tax ID"
-            className="w-full px-4 py-1 rounded-md border focus:outline-none focus:ring focus:border-blue-500 placeholder:text-sm"
-          />
+          <div className="flex flex-row">
+            <select
+              name="country"
+              id="country"
+              value={countryCode}
+              onChange={handleCountryCodeChange}
+              className=" py-1 rounded-md border focus:outline-none focus:ring focus:border-blue-500 text-sm"
+            >
+              <option value="+1">+1</option>
+              <option value="+44">+44</option>
+              <option value="+66">+66</option>
+            </select>
+            <input
+              type="text"
+              name="Phone number"
+              placeholder="Enter Phone number"
+              className="w-full px-4 py-1 rounded-md border focus:outline-none focus:ring focus:border-blue-500 placeholder:text-sm"
+            />
+          </div>
         </div>
         <div className="col-start-3">
           <h2 className="text-sm">Website</h2>
           <input
             type="text"
-            name="Fullname"
-            placeholder="Enter Full name"
+            name="website"
+            placeholder="Enter website"
             className="w-full px-4 py-1 rounded-md border focus:outline-none focus:ring focus:border-blue-500 placeholder:text-sm"
           />
         </div>
