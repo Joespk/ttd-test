@@ -2,12 +2,25 @@ import mail from "../assets/logo/mail.svg";
 import lock from "../assets/logo/lock.svg";
 import view from "../assets/logo/view.svg";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Signin = () => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const [country, setCountry] = useState<string>("Thailand");
   const [countryCode, setCountryCode] = useState<string>("+66");
+  const [province, setProvince] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+
+  const handleProvinceChange = (event: React.FormEvent<HTMLSelectElement>) => {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    setProvince(selectedValue);
+  };
+
+  const handleCityChange = (event: React.FormEvent<HTMLSelectElement>) => {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    setCity(selectedValue);
+  };
 
   const handleCountryCodeChange = (
     event: React.FormEvent<HTMLSelectElement>
@@ -167,6 +180,84 @@ const Signin = () => {
             className="w-full px-4 py-1 rounded-md border focus:outline-none focus:ring focus:border-blue-500 placeholder:text-sm"
           />
         </div>
+        <div className="col-start-1">
+          <h2 className="text-sm">Address</h2>
+          <textarea
+            name="Address"
+            placeholder="Enter Address"
+            className="w-full h-24 px-4 py-2 rounded-md border focus:outline-none focus:ring focus:border-blue-500 placeholder:text-sm resize-none"
+          />
+        </div>
+        <div className="col-start-2">
+          <h2 className="text-sm ">State/Province</h2>
+          <select
+            name="Choose Province"
+            id="province"
+            value={province}
+            onChange={handleProvinceChange}
+            className={`w-full pl-4 pr-16 py-1 rounded-md border focus:outline-none focus:ring focus:border-blue-500 text-sm mt-1 ${
+              !province && "text-gray-500"
+            }`}
+          >
+            <option value="" disabled selected className="text-gray-500">
+              Choose Province
+            </option>
+            <option value="United States">United States</option>
+            <option value="United Kingdom">United Kingdom</option>
+            <option value="Thailand">Thailand</option>
+          </select>
+          <h2 className="text-sm mt-1">City/District</h2>
+          <select
+            name="Choose Province"
+            id="City"
+            value={city}
+            onChange={handleCityChange}
+            className={`w-full pl-4 pr-16 py-1 rounded-md border focus:outline-none focus:ring focus:border-blue-500 text-sm mt-1 ${
+              !province && "text-gray-500"
+            }`}
+          >
+            <option value="" className="text-gray-500" disabled selected>
+              Choose District
+            </option>
+            <option value="United States">United States</option>
+            <option value="United Kingdom">United Kingdom</option>
+            <option value="Thailand">Thailand</option>
+          </select>
+        </div>
+        <div className="col-start-3">
+          <h2 className="text-sm ">Sub-District</h2>
+          <select
+            name="Choose Province"
+            id="province"
+            value={province}
+            onChange={handleProvinceChange}
+            className={`w-full pl-4 pr-16 py-1 rounded-md border focus:outline-none focus:ring focus:border-blue-500 text-sm mt-1 ${
+              !province && "text-gray-500"
+            }`}
+          >
+            <option value="" disabled selected className="text-gray-500">
+              Choose Sub-District
+            </option>
+            <option value="United States">United States</option>
+            <option value="United Kingdom">United Kingdom</option>
+            <option value="Thailand">Thailand</option>
+          </select>
+          <h2 className="text-sm mt-1">Zip Code</h2>
+          <input
+            type="text"
+            name="ZipCode"
+            placeholder="Enter Zip Code"
+            className="w-full px-4 py-1 rounded-md border focus:outline-none focus:ring focus:border-blue-500 placeholder:text-sm"
+          />
+        </div>
+        <Link to="/">
+          <button className="bg-black w-[50%] px-[16px] py-1 text-white font-semibold rounded-[33px] text-base drop-shadow-2xl  hover:translate-y-[-5px]">
+            Cancel
+          </button>
+        </Link>
+        <button className="bg-[#5FC198] w-[50%] px-[16px] py-1 text-white font-semibold rounded-[33px] text-base drop-shadow-2xl hover:translate-y-[-5px] col-start-3">
+          Submit
+        </button>
       </form>
     </div>
   );
