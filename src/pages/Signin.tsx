@@ -82,6 +82,7 @@ const Signin = () => {
     event.preventDefault();
     event.stopPropagation();
   };
+
   const handleProvinceChange = async (
     event: React.FormEvent<HTMLSelectElement>
   ) => {
@@ -171,6 +172,7 @@ const Signin = () => {
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
+
   return (
     <div className="container max-w-[1263px] mx-auto px-[250px] rounded-md overflow-hidden shadow-2xl bg-white pb-3  flex flex-col justify-between items-center  drop-shadow-xl  py-5 mt-3">
       <div
