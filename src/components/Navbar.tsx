@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import logo from "../assets/ttdlogo.svg";
 
 const Navbar = () => {
@@ -13,9 +14,11 @@ const Navbar = () => {
               </a>
             </li>
           </ul>
-          <button className="bg-[#2A4B6A] w-[141px] p-[16px] text-white font-semibold rounded-[33px] text-xl drop-shadow-2xl">
-            Sign In
-          </button>
+          <Link to="/signin">
+            <button className="bg-[#2A4B6A] w-[141px] p-[16px] text-white font-semibold rounded-[33px] text-xl drop-shadow-2xl">
+              Sign In
+            </button>
+          </Link>
         </div>
       </div>
     </nav>
