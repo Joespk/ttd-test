@@ -1,6 +1,7 @@
 import mail from "../assets/logo/mail.svg";
 import lock from "../assets/logo/lock.svg";
 import view from "../assets/logo/view.svg";
+import imagelogo from "../assets/logo/image.svg";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -20,6 +21,7 @@ interface Province {
 
 const Signin = () => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  const [image, setImage] = useState<string | null>(null);
   const [password, setPassword] = useState<string>("");
   const [country, setCountry] = useState<string>("Thailand");
   const [countryCode, setCountryCode] = useState<string>("+66");
@@ -49,6 +51,37 @@ const Signin = () => {
     fetchProvincesAndCities();
   }, []);
 
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleFileInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setImage(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const preventDefaults = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
   const handleProvinceChange = async (
     event: React.FormEvent<HTMLSelectElement>
   ) => {
@@ -139,8 +172,33 @@ const Signin = () => {
     setPasswordVisible(!passwordVisible);
   };
   return (
-    <div className="container max-w-[1263px] mx-auto px-[250px] rounded-md overflow-hidden shadow-2xl bg-white pb-3  flex flex-col justify-between items-center  drop-shadow-xl  py-4">
-      <form className="grid grid-cols-3 gap-4 justify-between mb-2">
+    <div className="container max-w-[1263px] mx-auto px-[250px] rounded-md overflow-hidden shadow-2xl bg-white pb-3  flex flex-col justify-between items-center  drop-shadow-xl  py-5 mt-3">
+      <div
+        className="w-36 h-36 border-2 border-dashed border-gray-300 rounded-full flex items-center justify-center mb-3"
+        onDrop={handleDrop}
+        onDragOver={preventDefaults}
+        onDragEnter={preventDefaults}
+      >
+        {!image && (
+          <label htmlFor="fileInput" className="text-gray-400 cursor-pointer">
+            <img src={imagelogo} alt="Profile Picture" />
+            <input
+              type="file"
+              id="fileInput"
+              className="hidden"
+              onChange={handleFileInputChange}
+            />
+          </label>
+        )}
+        {image && (
+          <img
+            src={image}
+            alt="Uploaded"
+            className="w-full h-full rounded-full"
+          />
+        )}
+      </div>
+      <form className="grid grid-cols-3 gap-2 justify-between mb-2">
         <div className="relative col-start-1 ">
           <h2 className="text-sm ">Email</h2>
           <div className="relative ">
@@ -208,6 +266,7 @@ const Signin = () => {
           </div>
           <br />
         </div>
+        <hr className="w-full col-start-1 col-end-4" />
         <h1 className="col-span-3 mb-2">Information</h1>
         <div className="col-">
           <h2 className="text-sm">Company Name</h2>
