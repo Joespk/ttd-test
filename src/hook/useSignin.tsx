@@ -42,7 +42,7 @@ const useSignin = () => {
     };
     setIsSubmitting(true);
     try {
-      //Api is not support upload image because api  is free version so we can't test it.
+      //Api is not support upload image because api  is free version so we can't test it. fix
       const res = await axios.post<UserDto>(
         "https://65ced717bdb50d5e5f5a070f.mockapi.io/testttd",
         newUserBody,
